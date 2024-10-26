@@ -66,8 +66,8 @@ export default function Featured() {
     <>
       <div className="bg-white pt-20 font-dm">
         {/* Header Section */}
-        <div className="text-[#004F44] flex justify-between w-full md:px-20 py-5">
-          <h1 className="text-4xl">Featured</h1>
+        <div className="text-[#004F44] flex justify-between w-full md:px-20 px-10 py-5">
+          <h1 className="md:text-4xl text-2xl">Featured</h1>
           <h6>View all</h6>
         </div>
 
@@ -94,7 +94,7 @@ export default function Featured() {
 
           {/* Card Container */}
           <div
-            className="cardContainer w-full px-10 py-10 flex space-x-6 overflow-x-auto scrollbar-hide"
+            className="cardContainer w-full px-10 py-5 flex space-x-6 overflow-x-auto scrollbar-hide"
             ref={scrollRef}
             onScroll={handleScroll}
           >

@@ -21,9 +21,9 @@ export default function NewArrivals() {
     ];
 
     return (
-        <div className="bg-white pt-20 font-dm">
-            <div className="text-[#004F44] flex justify-between w-full md:px-20 py-5">
-                <h1 className="text-3xl">Colorful New Arrivals</h1>
+        <div className="bg-white md:py-20 py-10 font-dm">
+            <div className="text-[#004F44] flex justify-between w-full md:px-20 px-5 py-0">
+                <h1 className="md:text-4xl text-2xl">Colorful New Arrivals</h1>
                 <h6>View all</h6>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-4 md:px-20 mt-10">

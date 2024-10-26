@@ -56,10 +56,10 @@ export default function PlantStands() {
 
   return (
     <>
-      <div className="bg-[#f3fff3] py-20 pt-20 font-dm">
+      <div className="bg-[#f3fff3] md:py-20 py-10 font-dm">
         {/* Header */}
-        <div className="text-[#004F44] flex justify-between w-full md:px-20 py-5">
-          <h1 className="text-3xl">Plant Stands</h1>
+        <div className="text-[#004F44] flex justify-between w-full md:px-20 px-5 py-0">
+          <h1 className="md:text-3xl text-2xl">Plant Stands</h1>
           <h6>View all</h6>
         </div>
 

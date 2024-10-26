@@ -1,26 +1,75 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { Search, User, ShoppingCart, Menu } from 'lucide-react';
+
 export default function Navbar() {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
+
     return (
-        <div className='h-[100px] fixed top-0 w-full text-white flex justify-between px-14 items-center font-dm'>
-            <div className='flex gap-10'>
-                <div>Shop</div>
-                <div>Products</div>
-                <div>Guide</div>
+        <>
+            {/* Main Navbar */}
+            <div className='h-20 fixed top-0 w-full bg-[#004F44] z-50 text-white flex justify-between px-4 md:px-14 items-center font-dm'>
+                {/* Mobile Menu Button */}
+                <button 
+                    className='md:hidden'
+                    onClick={toggleSidebar}
+                >
+                    <Menu size={24} />
+                </button>
+
+                {/* Desktop Navigation */}
+                <div className='hidden md:flex gap-10'>
+                    <div>Shop</div>
+                    <div>Products</div>
+                    <div>Guide</div>
+                </div>
+
+                {/* Logo */}
+                <div className='md:-ms-28'>
+                    <img src="/assets/logo2.png" alt="logo" className='w-[100px] h-[50px]'/>
+                </div>
+
+                {/* Desktop Icons */}
+                <div className='hidden md:flex gap-5'>
+                    <Search size={24} />
+                    <User size={24} />
+                    <ShoppingCart size={24} />
+                </div>
             </div>
-            <div className='-ms-28'>
-                <img src="/assets/logo2.png" alt="logo" className='w-[100px] h-[50px]'/>
+
+            {/* Mobile Sidebar */}
+            <div className={`fixed top-0 left-0 h-full w-64 bg-white transform transition-transform duration-300 ease-in-out z-[60] ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:hidden`}>
+                <div className="p-6">
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="text-xl font-semibold text-gray-800">Menu</h2>
+                        <button onClick={toggleSidebar} className="text-gray-600">
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <nav className="space-y-4">
+                        <a href="#" className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">Shop</a>
+                        <a href="#" className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">Products</a>
+                        <a href="#" className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">Guide</a>
+                        <a href="#" className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">Search</a>
+                        <a href="#" className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">User</a>
+                        <a href="#" className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">Cart</a>
+                    </nav>
+                </div>
             </div>
-            <div className='flex gap-5'>
-                <p>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-search"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
-                </p>
-                <p>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-user"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
-                </p>
-                <p>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-shopping-cart"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17h-11v-14h-2" /><path d="M6 5l14 1l-1 7h-13" /></svg>
-                </p>
-            </div>
-        </div>
-    )
+
+            {/* Overlay */}
+            {isSidebarOpen && (
+                <div 
+                    className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden"
+                    onClick={toggleSidebar}
+                />
+            )}
+        </>
+    );
 }

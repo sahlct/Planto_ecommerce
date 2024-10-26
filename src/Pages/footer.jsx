@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function Footer() {
   return (
-    <footer className="bg-[#004F44] py-16 px-5 md:px-10 text-white font-dm">
+    <footer className="bg-[#004F44] md:py-16 py-8 px-5 md:px-10 text-white font-dm">
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
         {/* Logo Section */}
         <div className="flex justify-center md:justify-start">
@@ -33,7 +33,7 @@ export default function Footer() {
         <div className='font-light'>
           <h3 className="font-light mb-4">NOT QUITE READY FOR SURVEY?</h3>
           <p className="mb-4 text-gray-300">Join our online no-community for free. No spam, ever.</p>
-          <div className="flex">
+          <div className="flex md:flex-col lg:flex-row">
             <input 
               type="email" 
               placeholder="enter your email" 
