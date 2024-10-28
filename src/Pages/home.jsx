@@ -1,7 +1,7 @@
 import { Dot } from 'lucide-react';
 import React from 'react';
 
-export default function Home() {
+export function Home() {
     return (
         <>
             <div className='min-h-screen bg-[#004F44] text-white flex flex-wrap-reverse mt-10 md:mt-0 gap-5 md:gap-0 md:flex-nowrap'>

@@ -1,7 +1,7 @@
 import { Mail, Phone } from 'lucide-react'
 import React from 'react'
 
-export default function ShippingCard() {
+export function ShippingCard() {
     return (
         <>
             <div className='h-[300px] md:my-20 my-10 md:mx-20 mx-5 flex flex-col sm:flex-row sm:gap-0 gap-5 font-dm'>

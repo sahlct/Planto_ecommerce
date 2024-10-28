@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function NewArrivals() {
+export function NewArrivals() {
     const flowers = [
         {
             src: 'https://christinagreve.com/wp-content/uploads/2018/10/AM6A3542web2.jpg?x15603',

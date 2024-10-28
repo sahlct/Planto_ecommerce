@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function SearchBar() {
+export function SearchBar() {
     return (
         <div className='md:my-10 my-0 h-[150px] bg-[#f3fff3] w-full flex justify-center items-center space-x-2 md:px-4 px-0'>
             <div className='border-2 border-[#004F44] w-[40px] h-[40px] flex justify-center items-center rounded-md'>

@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import { Search, User, ShoppingCart, Menu } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-export default function Navbar() {
+export function Navbar() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const navigate = useNavigate();
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
+    };
+
+    const goToCart = () => {
+        navigate('/cart');
     };
 
     return (
@@ -36,7 +42,7 @@ export default function Navbar() {
                 <div className='hidden md:flex gap-5'>
                     <Search size={24} />
                     <User size={24} />
-                    <ShoppingCart size={24} />
+                    <ShoppingCart size={24} onClick={goToCart} style={{cursor:'pointer'}} />
                 </div>
             </div>
 
@@ -53,12 +59,12 @@ export default function Navbar() {
                     </div>
 
                     <nav className="space-y-4">
-                        <a href="#" className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">Shop</a>
-                        <a href="#" className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">Products</a>
-                        <a href="#" className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">Guide</a>
-                        <a href="#" className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">Search</a>
-                        <a href="#" className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">User</a>
-                        <a href="#" className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">Cart</a>
+                        <p className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">Shop</p>
+                        <p className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">Products</p>
+                        <p className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">Guide</p>
+                        <p className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">Search</p>
+                        <p className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">User</p>
+                        <p onClick={goToCart} className=" block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded cursor-pointer">Cart</p>
                     </nav>
                 </div>
             </div>

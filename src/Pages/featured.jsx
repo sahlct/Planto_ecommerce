@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react'; // Import from lucide-react
 
-export default function Featured() {
+export function Featured() {
   const flowers = [
     {
       src: 'https://momentz.in/cdn/shop/products/MZ8854_b_1200x.jpg?v=1663244979',

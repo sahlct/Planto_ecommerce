@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react'; // Assuming you're using lucide-react for icons
 
-export default function PlantStands() {
+export function PlantStands() {
   const stands = [
     {
       src: 'https://www.puresweetjoy.co.za/wp-content/uploads/2016/04/Raised-Copper-Pipe-Pot-Plant-Stand-7-600x900.jpg',
