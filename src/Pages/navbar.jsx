@@ -35,7 +35,7 @@ export function Navbar() {
 
                 {/* Logo */}
                 <div className='md:-ms-28'>
-                    <img src="/assets/logo2.png" alt="logo" className='w-[100px] h-[50px]'/>
+                    <img src="/assets/LogoLast.png" alt="logo" className='w-[150px] h-[40px]'/>
                 </div>
 
                 {/* Desktop Icons */}

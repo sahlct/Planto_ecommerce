@@ -30,7 +30,7 @@ export function Home() {
                                 alt="New plant"
                                 className='w-full h-full max-h-[150px] md:max-h-[250px] object-cover'
                             />
-                            <span className='absolute top-4 left-4 bg-green-700 text-white px-3 py-1 text-sm rounded'>
+                            <span className='absolute hidden md:block top-4 left-4 bg-green-700 text-white px-3 py-1 text-sm rounded'>
                                 New
                             </span>
                         </div>
@@ -61,7 +61,7 @@ export function Home() {
                                 alt="Popular plant"
                                 className='w-full h-full max-h-[150px] md:max-h-[250px] object-cover z-10'
                             />
-                            <span className='absolute top-4 left-4 bg-green-700 text-white px-3 py-1 text-sm rounded'>
+                            <span className='absolute hidden md:block top-4 left-4 bg-green-700 text-white px-3 py-1 text-sm rounded'>
                                 Popular
                             </span>
                             <div className='absolute flex flex-col -bottom-10 -left-12'>
