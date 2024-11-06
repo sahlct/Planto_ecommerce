@@ -4,7 +4,7 @@ import React from 'react';
 export function Home() {
     return (
         <>
-            <div className='min-h-screen bg-[#004F44] text-white flex flex-wrap-reverse mt-10 md:mt-0 gap-5 md:gap-0 md:flex-nowrap'>
+            <div className='min-h-screen bg-[#004F44] text-white flex flex-wrap-reverse gap-5 md:gap-0 md:flex-nowrap'>
                 <div className='md:w-1/2 w-full lg:px-20 md:px-12 sm:px-8 px-5 flex flex-col md:gap-10 gap-5 justify-start sm:justify-center items-center'>
                     <h1 className='lg:text-6xl md:text-4xl text-3xl font-chillax'>Happiness blooms from within</h1>
                     <p className='lg:pe-20 pe-10 font-normal'>Our environment, the world in which we live and work, is a mirror of our attitudes and expectations.</p>
