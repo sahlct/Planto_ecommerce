@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Cart() {
     const navigate = useNavigate();
-    const [products] = useState([
+    const [products, setProducts] = useState([
         {
             id: 1,
             name: 'Rose Plank',
             price: 19,
             description: 'Rose Plank is a beautiful flower',
             color: 'Pink',
+            size: 'M',
             image: 'https://momentz.in/cdn/shop/products/MZ8854_b_1200x.jpg?v=1663244979',
+            quantity: 1,
         },
         {
             id: 2,
@@ -18,28 +20,40 @@ export default function Cart() {
             price: 14,
             description: 'Yellow Badri is an awesome flower',
             color: 'Light Yellow',
+            size: 'S',
             image: 'https://img.freepik.com/premium-photo/flower-pot-with-pink-flowers-it_863013-13058.jpg?w=740',
+            quantity: 1,
         },
-        // {
-        //     id: 3,
-        //     name: 'Yellow Badri',
-        //     price: 14,
-        //     description: 'Yellow Badri is an awesome flower',
-        //     color: 'Light Yellow',
-        //     image: 'https://img.freepik.com/premium-photo/flower-pot-with-white-background_863013-13061.jpg',
-        // },
-        // {
-        //     id: 4,
-        //     name: 'Yellow Badri',
-        //     price: 14,
-        //     description: 'Yellow Badri is an awesome flower',
-        //     color: 'Light Yellow',
-        //     image: 'https://img.freepik.com/premium-photo/photo-violet-flower-pot-as-houseplant-home-decoration-isolated-white-background_847439-1981.jpg',
-        // },
     ]);
 
     const handleBackToCart = () => {
         navigate('/home');
+    };
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    const incrementQuantity = (id) => {
+        setProducts((prevProducts) =>
+            prevProducts.map((product) =>
+                product.id === id ? { ...product, quantity: product.quantity + 1 } : product
+            )
+        );
+    };
+
+    const decrementQuantity = (id) => {
+        setProducts((prevProducts) =>
+            prevProducts.map((product) =>
+                product.id === id && product.quantity > 1
+                    ? { ...product, quantity: product.quantity - 1 }
+                    : product
+            )
+        );
+    };
+
+    const removeProduct = (id) => {
+        setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id));
     };
 
     return (
@@ -48,8 +62,8 @@ export default function Cart() {
             <div className="w-full lg:w-1/2 bg-[#f3fff3] flex flex-col">
                 {/* Fixed Header Section */}
                 <div className="p-5 lg:p-10 flex-shrink-0">
-                    <button 
-                        onClick={handleBackToCart} 
+                    <button
+                        onClick={handleBackToCart}
                         className="text-sm text-gray-600 mb-4 lg:mb-8"
                     >
                         &larr; Back to cart
@@ -62,15 +76,46 @@ export default function Cart() {
                 </div>
 
                 {/* Scrollable Product List */}
-                <div className="px-5 lg:px-10 pb-10 overflow-y-auto flex-grow">
+                <div className="px-5 lg:px-10 pb-10 overflow-y-auto flex-grow scrollbar-thin">
                     <div className="space-y-4">
                         {products.map((product) => (
-                            <div key={product.id} className="flex items-center p-4 border border-[#004F44] rounded-lg">
-                                <img src={product.image} alt={product.name} className="w-16 h-16 mr-4" />
-                                <div>
-                                    <h3 className="font-medium">{product.name} - ${product.price}</h3>
-                                    <p className="text-sm text-gray-500">{product.description}</p>
-                                    <span className="text-gray-700 text-xs">Color: {product.color}</span>
+                            <div
+                                key={product.id}
+                                className="relative p-4 border border-[#004F44] rounded-lg flex sm:flex-row sm:items-center flex-col items-center sm:justify-between"
+                            >
+                                {/* Remove Icon */}
+                                <button
+                                    onClick={() => removeProduct(product.id)}
+                                    className="absolute text-2xl top-0 right-2 text-gray-400 hover:text-red-500"
+                                >
+                                    &times;
+                                </button>
+
+                                {/* Product Image and Details */}
+                                <div className="flex items-center lg:items-start">
+                                    <img src={product.image} alt={product.name} className="w-16 h-16 mr-4 rounded-md" />
+                                    <div>
+                                        <h3 className="font-medium">{product.name} - ${product.price}</h3>
+                                        <p className="text-sm text-gray-500">{product.description}</p>
+                                        <span className="text-gray-700 text-xs">Size: {product.size}</span>
+                                    </div>
+                                </div>
+
+                                {/* Quantity Controls */}
+                                <div className="flex sm:me-10 items-center space-x-2 mt-4 sm:mt-0 sm:ml-auto justify-center">
+                                    <button
+                                        onClick={() => decrementQuantity(product.id)}
+                                        className="px-2 py-1 bg-gray-300 text-gray-700 rounded"
+                                    >
+                                        -
+                                    </button>
+                                    <span className="px-2">{product.quantity}</span>
+                                    <button
+                                        onClick={() => incrementQuantity(product.id)}
+                                        className="px-2 py-1 bg-gray-300 text-gray-700 rounded"
+                                    >
+                                        +
+                                    </button>
                                 </div>
                             </div>
                         ))}

@@ -64,7 +64,7 @@ export function Featured() {
 
   return (
     <>
-      <div className="bg-white pt-20 font-dm">
+      <div className="bg-white md:pt-20 pt-10 font-dm">
         {/* Header Section */}
         <div className="text-[#004F44] flex justify-between w-full md:px-20 px-10 py-5">
           <h1 className="md:text-4xl text-2xl">Featured</h1>
@@ -118,12 +118,12 @@ export function Featured() {
 
                 <div className="colors flex justify-between mt-4 items-center">
                   <div className="color">
-                    <p className="text-sm">Pot color</p>
+                    <p className="text-sm">Sizes</p>
                     <div className="flex space-x-2 mt-2">
-                      <div className="bg-pink-400 h-[10px] w-[10px] rounded-full"></div>
-                      <div className="bg-blue-300 h-[10px] w-[10px] rounded-full"></div>
-                      <div className="bg-orange-300 h-[10px] w-[10px] rounded-full"></div>
-                      <div className="bg-gray-400 h-[10px] w-[10px] rounded-full"></div>
+                      <div className="border-black border h-[15px] w-[15px] rounded-full  flex justify-center items-center" style={{fontSize:'10px'}}>S</div>
+                      <div className="border border-black h-[15px] w-[15px] rounded-full flex justify-center items-center" style={{fontSize:'10px'}}>M</div>
+                      <div className="border border-black h-[15px] w-[15px] rounded-full  flex justify-center items-center" style={{fontSize:'10px'}}>L</div>
+                      {/* <div className="bg-gray-400 h-[10px] w-[10px] rounded-full"></div> */}
                     </div>
                   </div>
                   <button className="bg-[#004F44] text-white px-4 py-2 rounded">Buy</button>
