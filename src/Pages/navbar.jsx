@@ -18,6 +18,10 @@ export function Navbar() {
         navigate('/products');
     }
 
+    const gotoHome = ()=>{
+        navigate('/home');
+    }
+
     return (
         <>
             {/* Main Navbar */}
@@ -38,7 +42,7 @@ export function Navbar() {
                 </div>
 
                 {/* Logo */}
-                <div className='md:-ms-28'>
+                <div className='md:-ms-28 cursor-pointer' onClick={gotoHome}>
                     <img src="/assets/LogoLast.png" alt="logo" className='w-[150px] h-[40px]'/>
                 </div>
 

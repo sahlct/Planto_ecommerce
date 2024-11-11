@@ -5,6 +5,7 @@ import Cart from './Pages/Cart';
 import MainHome from './Pages/mainHome';
 import {Product} from './Pages/product';
 import { Navbar } from './Pages/navbar';
+import { SingleProduct } from './Pages/singleProduct';
 
 
 function App() {
@@ -13,12 +14,10 @@ function App() {
       <div className="App">
       <Navbar />
         <Routes>
-          {/* Home path */}
           <Route path="/home" element={<MainHome />} />
-          {/* Cart path */}
           <Route path="/cart" element={<Cart />} />
           <Route path="/products" element={<Product />} />
-          {/* Redirect invalid paths to /home */}
+          <Route path="/products/:id" element={<SingleProduct />} />
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </div>
