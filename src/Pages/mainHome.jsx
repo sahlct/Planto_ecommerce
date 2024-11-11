@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import { Navbar } from './navbar';
-import { Home } from './home';
+// import { Navbar } from './navbar';
+// import { Home } from './home';
 import { Featured } from './featured';
 import { SearchBar } from './searchbar';
 import { NewArrivals } from './newArrivals';
@@ -18,9 +18,9 @@ export default function MainHome() {
 
   return (
     <div>
-      <Navbar />
+      {/* <Navbar /> */}
       <Carousel />
-      <Home />
+      {/* <Home /> */}
       <SearchBar />
       <Category />
       <Featured />

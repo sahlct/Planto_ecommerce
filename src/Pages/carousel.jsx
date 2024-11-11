@@ -42,9 +42,13 @@ export default function Carousel() {
     <div className="relative w-full mt-[80px] bg-white overflow-hidden">
       <div className="hs-carousel-body flex h-full transition-transform duration-700 ease-in-out" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
         {slides.map((slide, index) => (
-          <div className="hs-carousel-slide h-full w-full flex-shrink-0" key={index}>
-            <div className="flex justify-center max-h-[300px] h-full bg-gray-100 dark:bg-neutral-900">
-              <img src={slide} alt={`Slide ${index + 1}`} className="w-full h-full object-cover" />
+          <div className="hs-carousel-slide w-full flex-shrink-0" key={index}>
+            <div className="flex justify-center items-center w-full h-[300px] sm:h-[400px] lg:h-[400px] bg-gray-100 dark:bg-neutral-900">
+              <img 
+                src={slide} 
+                alt={`Slide ${index + 1}`} 
+                className="w-full h-full object-cover" 
+              />
             </div>
           </div>
         ))}

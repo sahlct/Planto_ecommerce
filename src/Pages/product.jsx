@@ -1,9 +1,7 @@
-import React, { useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react'; // Import from lucide-react
-import { useNavigate } from 'react-router-dom';
+import React, { useRef } from 'react';
 
-export function Featured() {
-  const flowers = [
+export function Product() {
+  const products = [
     {
       src: 'https://momentz.in/cdn/shop/products/MZ8854_b_1200x.jpg?v=1663244979',
       name: 'Peporomia',
@@ -34,48 +32,56 @@ export function Featured() {
       name: 'Violet SW',
       price: '$23',
     },
-    // {
-    //   src: 'https://img.freepik.com/premium-photo/front-view-decorative-potted-plant-interior-home-decor-minimalist-white-background_655090-519884.jpg',
-    //   name: 'Sea Malasia',
-    //   price: '$19',
-    // },
+    {
+      src: 'https://img.freepik.com/premium-photo/front-view-decorative-potted-plant-interior-home-decor-minimalist-white-background_655090-519884.jpg',
+      name: 'Sea Malasia',
+      price: '$19',
+    },
+    {
+        src: 'https://img.freepik.com/premium-photo/white-pot-with-flowers-it-that-are-pink-yellow-pink_1089151-194448.jpg?w=360',
+        name: 'Blue Semtone',
+        price: '$15',
+      },
+      {
+        src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUcfZxzr3e5HpK6IZRem5KQZ4aUIzTj35pG53sIjbtFWq4qUQesLcoKu-fHAUEGmKQqX0&usqp=CAU',
+        name: 'Pinker Zero',
+        price: '$13',
+      },
+      {
+        src: 'https://img.freepik.com/premium-photo/photo-violet-flower-pot-as-houseplant-home-decoration-isolated-white-background_847439-1981.jpg',
+        name: 'Violet SW',
+        price: '$23',
+      },
   ];
 
   const scrollRef = useRef(null);
-  const navigate = useNavigate();
-  // const [showLeftArrow, setShowLeftArrow] = useState(false);
-  // const [showRightArrow, setShowRightArrow] = useState(true);
+//   const [showLeftArrow, setShowLeftArrow] = useState(false);
+//   const [showRightArrow, setShowRightArrow] = useState(true);
 
   // Handle scroll event to toggle arrow visibility
-  // const handleScroll = () => {
-  //   const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-  //   setShowLeftArrow(scrollLeft > 0);
-  //   setShowRightArrow(scrollLeft + clientWidth < scrollWidth);
-  // };
+//   const handleScroll = () => {
+//     const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+//     setShowLeftArrow(scrollLeft > 0);
+//     setShowRightArrow(scrollLeft + clientWidth < scrollWidth);
+//   };
 
   // Scroll smoothly by the width of one card
-  // const scroll = (direction) => {
-  //   if (scrollRef.current) {
-  //     const cardWidth = scrollRef.current.firstChild.clientWidth + 24; // 24px for the gap between cards
-  //     scrollRef.current.scrollBy({
-  //       left: direction === 'left' ? -cardWidth : cardWidth,
-  //       behavior: 'smooth',
-  //     });
-  //   }
-  // };
-
-  const gotoProducts = ()=>{
-    navigate('/products');
-}
-
+//   const scroll = (direction) => {
+//     if (scrollRef.current) {
+//       const cardWidth = scrollRef.current.firstChild.clientWidth + 24; // 24px for the gap between cards
+//       scrollRef.current.scrollBy({
+//         left: direction === 'left' ? -cardWidth : cardWidth,
+//         behavior: 'smooth',
+//       });
+//     }
+//   };
 
   return (
     <>
-      <div className="bg-white md:pt-20 pt-10 font-dm">
+      <div className="bg-white pt-20 font-dm">
         {/* Header Section */}
-        <div className="text-[#004F44] flex justify-between w-full md:px-20 px-10 py-5">
-          <h1 className="md:text-4xl text-2xl">Featured</h1>
-          <h6 onClick={gotoProducts} className='cursor-pointer'>View all</h6>
+        <div className="text-[#004F44] w-full md:px-20 px-10 py-5">
+          <h1 className="md:text-4xl text-2xl">All Products</h1>
         </div>
 
         <div className="relative">
@@ -107,8 +113,8 @@ export function Featured() {
           >
             {/* Grid Layout with Responsive Columns */}
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 sm:gap-6 gap-4">
-              {/* Map over flowers array and render cards */}
-              {flowers.map((flower, index) => (
+              {/* Map over products array and render cards */}
+              {products.map((product, index) => (
                 <div
                   key={index}
                   className="card bg-white sm:p-4 p-3 shadow-xl"
@@ -116,14 +122,14 @@ export function Featured() {
                   {/* Image Container */}
                   <div className="h-[120px] sm:h-[220px] md:h-[240px] lg:h-[280px] xl:h-[300px]">
                     <img
-                      src={flower.src}
-                      alt={flower.name}
+                      src={product.src}
+                      alt={product.name}
                       className="object-cover h-full w-full rounded"
                     />
                   </div>
                   <div className="data mt-4 font-dm flex justify-between text-[#004F44]">
-                    <h1 className="sm:text-xl text-sm">{flower.name}</h1>
-                    <h4 className="sm:text-lg text-sm">{flower.price}</h4>
+                    <h1 className="sm:text-xl text-sm">{product.name}</h1>
+                    <h4 className="sm:text-lg text-sm">{product.price}</h4>
                   </div>
 
                   <div className="colors flex flex-wrap md:flex-nowrap space-y-3 justify-between sm:mt-4 mt-2 items-center">

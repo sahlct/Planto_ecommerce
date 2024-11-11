@@ -14,6 +14,10 @@ export function Navbar() {
         navigate('/cart');
     };
 
+    const gotoProducts = ()=>{
+        navigate('/products');
+    }
+
     return (
         <>
             {/* Main Navbar */}
@@ -29,7 +33,7 @@ export function Navbar() {
                 {/* Desktop Navigation */}
                 <div className='hidden md:flex gap-10'>
                     <div>Shop</div>
-                    <div>Products</div>
+                    <div onClick={gotoProducts} className='cursor-pointer'>Products</div>
                     <div>Guide</div>
                 </div>
 
@@ -60,7 +64,7 @@ export function Navbar() {
 
                     <nav className="space-y-4">
                         <p className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">Shop</p>
-                        <p className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">Products</p>
+                        <p onClick={gotoProducts} className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded cursor-pointer" >Products</p>
                         <p className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">Guide</p>
                         <p className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">Search</p>
                         <p className="block py-2.5 px-4 text-gray-700 hover:bg-gray-100 rounded">User</p>
