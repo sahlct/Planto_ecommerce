@@ -57,15 +57,15 @@ export function Product() {
   return (
     <>
       <div className="bg-white pt-20 font-dm">
-        <div className="text-[#004F44] w-full flex justify-between md:px-20 px-10 py-5">
+        <div className="text-[#004F44] w-full flex justify-between space-y-2 flex-col sm:flex-row md:px-20 px-8 py-5">
           <h1 className="md:text-4xl text-2xl">All Products</h1>
-          <div className="relative w-1/4">
+          <div className="relative sm:w-1/4 w-full">
             <input
               type="search"
               placeholder="Search Flowers ..."
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              className="w-full h-[40px] px-4 rounded-md border-2 border-[#004F44] focus:outline-none focus:border-[#007B73] transition-colors"
+              className="w-full sm:h-[40px] h-[30px] px-4 rounded-md border-2 border-[#004F44] focus:outline-none focus:border-[#007B73] transition-colors"
             />
           </div>
         </div>

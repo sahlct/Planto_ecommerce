@@ -1,5 +1,4 @@
-import React, { useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react'; // Import from lucide-react
+import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export function Featured() {
@@ -43,26 +42,6 @@ export function Featured() {
 
   const scrollRef = useRef(null);
   const navigate = useNavigate();
-  // const [showLeftArrow, setShowLeftArrow] = useState(false);
-  // const [showRightArrow, setShowRightArrow] = useState(true);
-
-  // Handle scroll event to toggle arrow visibility
-  // const handleScroll = () => {
-  //   const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-  //   setShowLeftArrow(scrollLeft > 0);
-  //   setShowRightArrow(scrollLeft + clientWidth < scrollWidth);
-  // };
-
-  // Scroll smoothly by the width of one card
-  // const scroll = (direction) => {
-  //   if (scrollRef.current) {
-  //     const cardWidth = scrollRef.current.firstChild.clientWidth + 24; // 24px for the gap between cards
-  //     scrollRef.current.scrollBy({
-  //       left: direction === 'left' ? -cardWidth : cardWidth,
-  //       behavior: 'smooth',
-  //     });
-  //   }
-  // };
 
   const gotoProducts = ()=>{
     navigate('/products');
@@ -79,26 +58,6 @@ export function Featured() {
         </div>
 
         <div className="relative">
-          {/* Left Arrow */}
-          {/* {showLeftArrow && (
-            <button
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-lg"
-              onClick={() => scroll('left')}
-            >
-              <ChevronLeft className="h-6 w-6 text-[#004F44]" />
-            </button>
-          )} */}
-
-          {/* Right Arrow */}
-          {/* {showRightArrow && (
-            <button
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-lg"
-              onClick={() => scroll('right')}
-            >
-              <ChevronRight className="h-6 w-6 text-[#004F44]" />
-            </button>
-          )} */}
-
           {/* Card Container */}
           <div
             className="cardContainer w-full md:px-10 px-5 py-5 overflow-x-auto scrollbar-hide"
