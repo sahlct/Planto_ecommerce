@@ -35,7 +35,7 @@ export function Product() {
             src: item.M06_thumbnail_image,
             name: item.M06_product_sku_name,
             price: `$${item.M06_price}`,
-            availableSizes: item.M06_available_sizes || [], // Assume sizes are in `M06_available_sizes`
+            variations: item.Variations || [], // Store variations directly
           }));
 
           setProducts(formattedProducts);
@@ -53,6 +53,50 @@ export function Product() {
   const singleItem = (id) => {
     navigate(`/products/${id}`);
   };
+
+  const isProductInLocalStorage = (productId) => {
+    const storedProducts = JSON.parse(localStorage.getItem('purchasedProducts')) || [];
+    return storedProducts.some((product) => product.id === productId);
+  };
+  const handleBuyProduct = (product) => {
+    const storedProducts = JSON.parse(localStorage.getItem('purchasedProducts')) || [];
+    
+    // Check if the product is already in the cart
+    const existingProductIndex = storedProducts.findIndex((p) => p.id === product.id);
+    
+    if (existingProductIndex >= 0) {
+      // If product is already in the cart, increment the quantity
+      storedProducts[existingProductIndex].quantity += 1;
+    } else {
+      // If product is not in the cart, add it with quantity = 1
+      const newProduct = { ...product, quantity: 1 };
+      storedProducts.push(newProduct);
+    }
+  
+    // Save the updated products array back to localStorage
+    localStorage.setItem('purchasedProducts', JSON.stringify(storedProducts));
+  };
+  
+  const handleRemoveProduct = (productId) => {
+    let storedProducts = JSON.parse(localStorage.getItem('purchasedProducts')) || [];
+    
+    // Find the product in the cart
+    const productIndex = storedProducts.findIndex((product) => product.id === productId);
+    
+    if (productIndex >= 0) {
+      // If the product is in the cart and quantity is greater than 1, decrement the quantity
+      if (storedProducts[productIndex].quantity > 1) {
+        storedProducts[productIndex].quantity -= 1;
+      } else {
+        // If quantity is 1, remove the product from the cart
+        storedProducts = storedProducts.filter((product) => product.id !== productId);
+      }
+    }
+  
+    // Save the updated products array back to localStorage
+    localStorage.setItem('purchasedProducts', JSON.stringify(storedProducts));
+  };
+  
 
   return (
     <>
@@ -73,51 +117,81 @@ export function Product() {
         <div className="relative">
           <div className="cardContainer w-full md:px-10 px-5 py-5 overflow-x-auto scrollbar-hide">
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 sm:gap-6 gap-4">
-              {products.map((product) => (
-                <div
-                  key={product.id}
-                  onClick={() => singleItem(product.id)}
-                  className="card cursor-pointer bg-white sm:p-4 p-3 shadow-xl"
-                >
-                  <div className="h-[120px] sm:h-[220px] md:h-[240px] lg:h-[280px]">
-                    <img
-                      src={product.src}
-                      alt={product.name}
-                      className="object-cover h-full w-full rounded"
-                    />
-                  </div>
-                  <div className="data mt-4 font-dm flex justify-between text-[#004F44]">
-                    <h1 className="sm:text-xl text-sm">{product.name}</h1>
-                    <h4 className="sm:text-lg text-sm">{product.price}</h4>
-                  </div>
-                  <div className="colors flex flex-wrap md:flex-nowrap space-y-3 justify-between sm:mt-4 mt-2 items-center">
-                    <div className="color flex space-x-2 justify-center items-center">
-                      <p className="sm:text-sm text-xs">Sizes</p>
-                      <div className="flex justify-center items-center space-x-2">
-                        {/* Render only available sizes */}
-                        {product.availableSizes.includes("S") && (
-                          <div className="border border-black h-[15px] w-[15px] rounded-full flex justify-center items-center" style={{ fontSize: "10px" }}>
-                            S
-                          </div>
-                        )}
-                        {product.availableSizes.includes("M") && (
-                          <div className="border border-black h-[15px] w-[15px] rounded-full flex justify-center items-center" style={{ fontSize: "10px" }}>
-                            M
-                          </div>
-                        )}
-                        {product.availableSizes.includes("L") && (
-                          <div className="border border-black h-[15px] w-[15px] rounded-full flex justify-center items-center" style={{ fontSize: "10px" }}>
-                            L
-                          </div>
-                        )}
-                      </div>
+              {products.map((product) => {
+                // Separate sizes and colors from variations
+                const sizes = product.variations
+                  .filter((variation) => variation.M08_name === 'Size')
+                  .map((variation) => variation.M09_name);
+                const colors = product.variations
+                  .filter((variation) => variation.M08_name === 'Color')
+                  .map((variation) => variation.M09_name);
+
+                const inCart = isProductInLocalStorage(product.id);
+
+                return (
+                  <div
+                    key={product.id}
+                    onClick={() => singleItem(product.id)}
+                    className="card cursor-pointer bg-white sm:p-4 p-3 shadow-xl"
+                  >
+                    <div className="h-[120px] sm:h-[220px] md:h-[240px] lg:h-[280px]">
+                      <img
+                        src={product.src}
+                        alt={product.name}
+                        className="object-cover h-full w-full rounded"
+                      />
                     </div>
-                    <button className="bg-[#004F44] w-full sm:w-auto text-white text-base sm:text-lg px-4 sm:py-2 py-1 rounded">
-                      Buy
-                    </button>
+                    <div className="data mt-4 font-dm flex justify-between text-[#004F44]">
+                      <h1 className="sm:text-xl text-sm">{product.name}</h1>
+                      <h4 className="sm:text-lg text-sm">{product.price}</h4>
+                    </div>
+                    <div className='flex justify-between flex-col sm:flex-row'>
+                      <div className="variations flex flex-col space-y-1 sm:mt-4 mt-2 items-start">
+                        {/* Sizes */}
+                        <div className="size flex space-x-2 items-center">
+                          <p className="sm:text-sm text-xs">Sizes:</p>
+                          <div className="flex space-x-2">
+                            {sizes.length > 0 ? sizes.map((size, index) => (
+                              <div
+                                key={index}
+                                className="border border-black h-[15px] w-[15px] rounded-full flex items-center justify-center text-[10px]"
+                              >
+                                {size}
+                              </div>
+                            )) : <span className="text-xs">N/A</span>}
+                          </div>
+                        </div>
+
+                        {/* Colors */}
+                        <div className="color flex space-x-2 items-center">
+                          <p className="sm:text-sm text-xs">Colors:</p>
+                          <div className="flex space-x-2">
+                            {colors.length > 0 ? colors.map((color, index) => (
+                              <div
+                                key={index}
+                                className="h-[15px] w-[15px] rounded-full border border-black flex items-center justify-center text-[10px]"
+                                style={{ backgroundColor: color.toLowerCase() }}
+                              >
+                              </div>
+                            )) : <span className="text-xs">N/A</span>}
+                          </div>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          inCart ? handleRemoveProduct(product.id) : handleBuyProduct(product);
+                          setProducts([...products]); // Trigger re-render
+                        }}
+                        className={`w-full sm:w-auto text-white text-base sm:text-lg px-4 sm:py-2 py-1 mt-4 rounded ${inCart ? "bg-red-500" : "bg-[#004F44]"}`}
+                      >
+                        {inCart ? "Remove" : "Buy"}
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
