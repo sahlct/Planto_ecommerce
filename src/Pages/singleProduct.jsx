@@ -33,12 +33,14 @@ export function SingleProduct() {
   const handleAddToCart = () => {
     const storedProducts =
       JSON.parse(localStorage.getItem("purchasedProducts")) || [];
+
     const newProduct = {
       id: productData._id,
       name: productData.M06_product_sku_name,
       price: productData.M06_price,
       src: productData.M06_thumbnail_image,
       quantity: 1,
+      variations: productData.Variations || [], // Add variations here
     };
 
     // Add new product to storage

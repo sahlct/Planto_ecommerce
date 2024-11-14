@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Cart() {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // State for loading
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Form state
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [district, setDistrict] = useState("");
+  const [pincode, setPincode] = useState("");
 
-  // Load products from localStorage when the component mounts
   useEffect(() => {
-    const storedProducts =
-      JSON.parse(localStorage.getItem("purchasedProducts")) || [];
+    const storedProducts = JSON.parse(localStorage.getItem("purchasedProducts")) || [];
     setProducts(storedProducts);
-    setIsLoading(false); // Set loading to false after data is loaded
+    setIsLoading(false);
     window.scrollTo(0, 0);
   }, []);
 
-  const handleBackToCart = () => {
-    navigate("/home");
-  };
+  const handleBackToCart = () => navigate("/home");
+  const singleItem = (id) => navigate(`/products/${id}`);
 
-  const singleItem = (id) => {
-    navigate(`/products/${id}`);
-  };
-
-  // Update localStorage after modifying the products
   const updateLocalStorage = (updatedProducts) => {
     localStorage.setItem("purchasedProducts", JSON.stringify(updatedProducts));
   };
@@ -31,11 +31,9 @@ export default function Cart() {
   const incrementQuantity = (id) => {
     setProducts((prevProducts) => {
       const updatedProducts = prevProducts.map((product) =>
-        product.id === id
-          ? { ...product, quantity: product.quantity + 1 }
-          : product
+        product.id === id ? { ...product, quantity: product.quantity + 1 } : product
       );
-      updateLocalStorage(updatedProducts); // Update localStorage
+      updateLocalStorage(updatedProducts);
       return updatedProducts;
     });
   };
@@ -47,30 +45,56 @@ export default function Cart() {
           ? { ...product, quantity: product.quantity - 1 }
           : product
       );
-      updateLocalStorage(updatedProducts); // Update localStorage
+      updateLocalStorage(updatedProducts);
       return updatedProducts;
     });
   };
 
   const removeProduct = (id) => {
     setProducts((prevProducts) => {
-      const updatedProducts = prevProducts.filter(
-        (product) => product.id !== id
-      );
-      updateLocalStorage(updatedProducts); // Update localStorage
+      const updatedProducts = prevProducts.filter((product) => product.id !== id);
+      updateLocalStorage(updatedProducts);
       return updatedProducts;
     });
   };
 
-  // Calculate the total price of the cart
   const getTotalPrice = () => {
-    return products.reduce((total, product) => {
-      return total + product.price * product.quantity;
-    }, 0);
+    return products.reduce((total, product) => total + product.price * product.quantity, 0);
+  };
+
+  const handleOrderNow = () => {
+    if (!email || !phone || !address || !district || !pincode) {
+      toast.error("Please fill all required fields!");
+      return;
+    }
+
+    // Format message
+    let message = `CADRE Flower Shoppee\nPhone: ${phone},\nEmail: ${email},\nAddress: ${address},\nDistrict: ${district},\nPincode: ${pincode}\n\n---------------------------------\nOrdered Item's\n---------------------------------\n`;
+    
+    products.forEach((product, index) => {
+      const sizes = product.variations
+        .filter((variation) => variation.M08_name === "Size")
+        .map((variation) => variation.M09_name)
+        .join(", ");
+      const colors = product.variations
+        .filter((variation) => variation.M08_name === "Color")
+        .map((variation) => variation.M09_name)
+        .join(", ");
+      message += `${index + 1}. Name: ${product.name}\n    Price: $${product.price}\n    Quantity: ${product.quantity}\n    Size: ${sizes || "N/A"}\n    Color: ${colors || "N/A"}\n\n`;
+    });
+
+    const subtotal = getTotalPrice().toFixed(2);
+    message += `--------------------------------\nSub Total : $${subtotal}\nDiscount : $0\nTotal : $${subtotal}/-\n\nHappy Purchasing!\n--------------------------------`;
+
+    // WhatsApp URL
+    const whatsappUrl = `https://wa.me/919496279843?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank");
   };
 
   return (
     <div className="flex flex-col lg:flex-row h-screen pt-20">
+      <Toaster position="top-center" reverseOrder={false} />
+      
       {/* Product Information & Review Section */}
       <div className="w-full lg:w-1/2 bg-[#f3fff3] flex flex-col">
         <div className="p-5 lg:p-10 flex-shrink-0">
@@ -92,14 +116,12 @@ export default function Cart() {
 
         <div className="px-5 lg:px-10 pb-10 overflow-y-auto flex-grow scrollbar-thin">
           {isLoading ? (
-            // Show loading animation
             <div className="loader flex justify-center items-center">
               <li className="ball"></li>
               <li className="ball"></li>
               <li className="ball"></li>
             </div>
           ) : products.length === 0 ? (
-            // Show "No products available" if the cart is empty
             <div className="flex flex-col items-center justify-center text-center">
               <p className="text-lg text-gray-500 mb-4">No products available</p>
               <button
@@ -112,7 +134,6 @@ export default function Cart() {
           ) : (
             <div className="space-y-4">
               {products.map((product) => {
-                // Safely extract sizes and colors from product variations
                 const sizes = product.variations
                   ? product.variations
                       .filter((variation) => variation.M08_name === "Size")
@@ -209,6 +230,8 @@ export default function Cart() {
               <label className="block text-gray-700">Email address</label>
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="planto@gmail.com"
                 className="w-full p-2 border rounded"
               />
@@ -217,6 +240,8 @@ export default function Cart() {
               <label className="block text-gray-700">Phone Number</label>
               <input
                 type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 placeholder="+91 9496279843"
                 className="w-full p-2 border rounded"
               />
@@ -226,17 +251,23 @@ export default function Cart() {
           <div>
             <label className="block text-gray-700">Address</label>
             <textarea
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               placeholder="Type your address..."
               className="w-full border rounded p-2"
             ></textarea>
             <div className="flex flex-col sm:flex-row gap-2 mt-2">
               <input
                 type="text"
+                value={district}
+                onChange={(e) => setDistrict(e.target.value)}
                 placeholder="District"
                 className="w-full sm:w-1/2 p-2 border rounded"
               />
               <input
                 type="text"
+                value={pincode}
+                onChange={(e) => setPincode(e.target.value)}
                 placeholder="PinCode"
                 className="w-full sm:w-1/2 p-2 border rounded"
               />
@@ -256,7 +287,10 @@ export default function Cart() {
             <span>${getTotalPrice().toFixed(2)}</span>
           </div>
 
-          <button className="w-full bg-[#004F44] text-white p-3 rounded-lg mt-6 md:mt-20">
+          <button
+            onClick={handleOrderNow}
+            className="w-full bg-[#004F44] text-white p-3 rounded-lg mt-6 md:mt-20"
+          >
             Order Now
           </button>
         </div>
