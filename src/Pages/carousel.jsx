@@ -1,26 +1,38 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 export default function Carousel() {
+  const [slides, setSlides] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const slides = [
-    'https://www.shutterstock.com/image-vector/summer-sale-three-blue-podium-260nw-2471730467.jpg',
-    'https://cdn.sanity.io/images/cbjxg0yl/production_v2/207796ae5c4b77588415a94bdaf3c8c29ea92bd3-2480x761.jpg',
-    'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/83d70974403181.5c2e97fb1f91b.jpg'
-  ];
   const autoPlayInterval = 3000; // 3 seconds
-  const slideCount = slides.length;
   const autoPlayRef = useRef();
+
+  useEffect(() => {
+    // Fetch carousel images from API
+    const fetchSlides = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API}/api/v1/customer/carousels`);
+        const data = await response.json();
+        if (data.success) {
+          // Set images from API response
+          setSlides(data.data.map(item => item.P02_image));
+        }
+      } catch (error) {
+        console.error('Error fetching carousel data:', error);
+      }
+    };
+    fetchSlides();
+  }, []);
 
   useEffect(() => {
     autoPlayRef.current = startAutoPlay();
     return () => {
       stopAutoPlay();
     };
-  }, [currentIndex]);
+  }, [currentIndex, slides]);
 
   const startAutoPlay = () => {
     return setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % slideCount);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
     }, autoPlayInterval);
   };
 
@@ -30,24 +42,27 @@ export default function Carousel() {
 
   const goToPrevious = () => {
     stopAutoPlay();
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? slideCount - 1 : prevIndex - 1));
+    setCurrentIndex((prevIndex) => (prevIndex === 0 ? slides.length - 1 : prevIndex - 1));
   };
 
   const goToNext = () => {
     stopAutoPlay();
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % slideCount);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
   };
 
   return (
     <div className="relative w-full mt-[80px] bg-white overflow-hidden">
-      <div className="hs-carousel-body flex h-full transition-transform duration-700 ease-in-out" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+      <div
+        className="hs-carousel-body flex h-full transition-transform duration-700 ease-in-out"
+        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+      >
         {slides.map((slide, index) => (
           <div className="hs-carousel-slide w-full flex-shrink-0" key={index}>
             <div className="flex justify-center items-center w-full h-[300px] sm:h-[400px] lg:h-[400px] bg-gray-100 dark:bg-neutral-900">
-              <img 
-                src={slide} 
-                alt={`Slide ${index + 1}`} 
-                className="w-full h-full object-cover" 
+              <img
+                src={slide}
+                alt={`Slide ${index + 1}`}
+                className="w-full h-full object-cover"
               />
             </div>
           </div>

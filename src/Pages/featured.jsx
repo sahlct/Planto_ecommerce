@@ -20,7 +20,7 @@ export function Featured() {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "https://ecommerce-backend-template.onrender.com/api/v1/customer/product-sku?page=1&limit=4&sortField=M06_MRP&sortOrder=asc&search="
+          `${process.env.REACT_APP_API}/api/v1/customer/product-sku?page=1&limit=4&sortField=M06_MRP&sortOrder=asc&search=`
         );
         const data = await response.json();
 
@@ -94,7 +94,7 @@ export function Featured() {
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
-      <div className="bg-white md:pt-20 pt-10 font-dm">
+      <div className="bg-white md:pt-10 pt-5 font-dm">
         <div className="text-[#004F44] flex justify-between w-full md:px-20 px-10 py-5">
           <h1 className="md:text-4xl text-2xl">Featured</h1>
           <h6 onClick={gotoProducts} className="cursor-pointer">

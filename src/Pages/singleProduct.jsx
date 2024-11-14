@@ -13,7 +13,7 @@ export function SingleProduct() {
     // Fetch product data from the API
     axios
       .get(
-        `https://ecommerce-backend-template.onrender.com/api/v1/customer/product-sku/${id}`
+        `${process.env.REACT_APP_API}/api/v1/customer/product-sku/${id}`
       )
       .then((response) => {
         const data = response.data.data;

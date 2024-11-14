@@ -6,7 +6,7 @@ export function Footer() {
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
         {/* Logo Section */}
         <div className="flex justify-center md:justify-start">
-          <img src="/assets/LogoLast.png" alt="Logo" className="md:h-12 h-10" />
+          <img src="/assets/image.png" alt="Logo" className="w-[80px] md:w-[100px] max-h-[60px]" />
         </div>
 
         {/* About Section */}

@@ -43,7 +43,7 @@ export function Navbar() {
 
                 {/* Logo */}
                 <div className='md:-ms-28 cursor-pointer' onClick={gotoHome}>
-                    <img src="/assets/LogoLast.png" alt="logo" className='w-[150px] h-[40px]'/>
+                    <img src="/assets/image.png" alt="logo" className='w-[80px] h-[45px] md:w-[90px] max-h-[65px]'/>
                 </div>
 
                 {/* Desktop Icons */}
