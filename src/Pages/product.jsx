@@ -26,7 +26,7 @@ export function Product() {
       setLoading(true); // Set loading to true before fetching
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_API}/api/v1/customer/product-sku?page=1&limit=4&sortField=M06_MRP&sortOrder=asc&search=${debouncedSearchText}&minPrice=&maxPrice=&categoryId=`
+          `${process.env.REACT_APP_API}/api/v1/customer/product-sku?page=1&limit=5&sortField=M06_MRP&sortOrder=asc&search=${debouncedSearchText}&minPrice=&maxPrice=&categoryId=`
         );
         const result = await response.json();
 
@@ -35,7 +35,7 @@ export function Product() {
             id: item._id,
             src: item.M06_thumbnail_image,
             name: item.M06_product_sku_name,
-            price: `$${item.M06_price}`,
+            price: `QAR ${item.M06_price}`,
             variations: item.Variations || [],
           }));
           setProducts(formattedProducts);

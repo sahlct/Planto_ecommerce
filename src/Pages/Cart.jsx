@@ -87,7 +87,7 @@ export default function Cart() {
     message += `--------------------------------\nSub Total : $${subtotal}\nDiscount : $0\nTotal : $${subtotal}/-\n\nHappy Purchasing!\n--------------------------------`;
 
     // WhatsApp URL
-    const whatsappUrl = `https://wa.me/919496279843?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/918111866093?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
   };
 
