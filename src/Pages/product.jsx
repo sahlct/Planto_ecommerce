@@ -35,7 +35,7 @@ export function Product() {
             id: item._id,
             src: item.M06_thumbnail_image,
             name: item.M06_product_sku_name,
-            price: `QAR ${item.M06_price}`,
+            price: item.M06_price,
             variations: item.Variations || [],
           }));
           setProducts(formattedProducts);
@@ -71,7 +71,7 @@ export function Product() {
       const newProduct = { ...product, quantity: 1 };
       storedProducts.push(newProduct);
     }
-  
+    console.log("stored",storedProducts);
     localStorage.setItem('purchasedProducts', JSON.stringify(storedProducts));
     toast.success(`${product.name} added to cart!`);
   };
@@ -146,7 +146,7 @@ export function Product() {
                     </div>
                     <div className="data mt-4 font-dm flex justify-between text-[#004F44]">
                       <h1 className="sm:text-xl text-sm">{product.name}</h1>
-                      <h4 className="sm:text-lg text-sm">{product.price}</h4>
+                      <h4 className="sm:text-lg text-sm">QAR {product.price}</h4>
                     </div>
                     <div className='flex justify-between flex-col sm:flex-row'>
                       <div className="variations flex flex-col space-y-1 sm:mt-4 mt-2 items-start">

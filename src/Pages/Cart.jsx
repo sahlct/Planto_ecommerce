@@ -169,7 +169,7 @@ export default function Cart() {
                       />
                       <div className="flex flex-col">
                         <h3 className="font-medium text-lg">
-                          {product.name} - ${product.price}
+                          {product.name} - QAR {product.price}
                         </h3>
                         <p className="text-sm text-gray-500">
                           {product.description}
@@ -276,15 +276,15 @@ export default function Cart() {
 
           <div className="flex justify-between mt-4 text-gray-700">
             <span>Sub Total</span>
-            <span>${getTotalPrice().toFixed(2)}</span>
+            <span>QAR {getTotalPrice().toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-gray-700">
             <span>Discount</span>
-            <span>$0</span>
+            <span>QAR 0</span>
           </div>
           <div className="flex justify-between font-semibold mt-2">
             <span>Total</span>
-            <span>${getTotalPrice().toFixed(2)}</span>
+            <span>QAR {getTotalPrice().toFixed(2)}</span>
           </div>
 
           <button

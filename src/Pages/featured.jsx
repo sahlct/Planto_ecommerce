@@ -28,7 +28,7 @@ export function Featured() {
           const formattedProducts = data.data.products_skus.map((product) => ({
             id: product._id,
             name: product.M06_product_sku_name,
-            price: `QAR ${product.M06_price}`,
+            price: product.M06_price,
             src: product.M06_thumbnail_image,
             variations: product.Variations || [],
           }));
@@ -65,7 +65,7 @@ export function Featured() {
       const newProduct = { ...product, quantity: 1 };
       storedProducts.push(newProduct);
     }
-
+    console.log("fetured",storedProducts);
     localStorage.setItem("purchasedProducts", JSON.stringify(storedProducts));
     toast.success(`${product.name} added to cart!`);
   };
@@ -144,7 +144,7 @@ export function Featured() {
                       </div>
                       <div className="data mt-4 font-dm flex justify-between text-[#004F44]">
                         <h1 className="sm:text-xl text-sm">{product.name}</h1>
-                        <h4 className="sm:text-lg text-sm">{product.price}</h4>
+                        <h4 className="sm:text-lg text-sm">QAR {product.price}</h4>
                       </div>
                       <div className="flex justify-between flex-col sm:flex-row">
                         <div className="variations flex flex-col space-y-1 sm:mt-4 mt-2 items-start">
