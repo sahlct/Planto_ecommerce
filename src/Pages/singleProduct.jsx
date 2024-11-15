@@ -108,10 +108,10 @@ export function SingleProduct() {
               {productData.M06_product_sku_name}
             </h2>
             <div className="text-lg text-gray-500 line-through">
-              £{productData.M06_MRP}
+              QAR {productData.M06_MRP}
             </div>
             <div className="text-xl font-bold text-red-500">
-              £{productData.M06_price}
+              QAR {productData.M06_price}
             </div>
             <div className="text-sm text-gray-600">
               {productData.M06_quantity} Sold

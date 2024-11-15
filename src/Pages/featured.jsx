@@ -28,7 +28,7 @@ export function Featured() {
           const formattedProducts = data.data.products_skus.map((product) => ({
             id: product._id,
             name: product.M06_product_sku_name,
-            price: product.M06_price,
+            price: `QAR ${product.M06_price}`,
             src: product.M06_thumbnail_image,
             variations: product.Variations || [],
           }));
