@@ -15,6 +15,7 @@ export default function Cart() {
   const [building, setBuilding] = useState("");
   const [doorNumber, setDoorNumber] = useState("");
 
+  // Load products from localStorage
   useEffect(() => {
     const storedProducts = JSON.parse(localStorage.getItem("purchasedProducts")) || [];
     setProducts(storedProducts);
@@ -23,18 +24,28 @@ export default function Cart() {
   }, []);
 
   const handleBackToCart = () => navigate("/home");
+
+  // Calculate total price
   const getTotalPrice = () => {
     return products.reduce((total, product) => total + product.price * product.quantity, 0);
   };
 
+  // Update product quantity
+  const updateQuantity = (id, newQuantity) => {
+    const updatedProducts = products.map((product) =>
+      product.id === id ? { ...product, quantity: newQuantity } : product
+    );
+    setProducts(updatedProducts);
+    localStorage.setItem("purchasedProducts", JSON.stringify(updatedProducts));
+  };
+
+  // Handle order placement
   const handleOrderNow = () => {
-    // Validation
     if (!name || !contactNumber || !zone) {
       toast.error("Please fill in all required fields!");
       return;
     }
 
-    // Format message
     let message = `CADRE Flower Shoppee\nName: ${name}\nContact: ${contactNumber}\nZone: ${zone}\nStreet: ${street || "N/A"}\nBuilding: ${building || "N/A"}\nDoor Number: ${doorNumber || "N/A"}\n\n---------------------------------\nOrdered Item's\n---------------------------------\n`;
 
     products.forEach((product, index) => {
@@ -51,7 +62,7 @@ export default function Cart() {
   return (
     <div className="flex flex-col lg:flex-row h-screen pt-20">
       <Toaster position="top-center" reverseOrder={false} />
-      
+
       {/* Product Information Section */}
       <div className="w-full lg:w-1/2 bg-[#f3fff3] flex flex-col">
         <div className="p-5 lg:p-10 flex-shrink-0">
@@ -98,12 +109,15 @@ export default function Cart() {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      setProducts((prev) => prev.filter((p) => p.id !== product.id));
+                      const updatedProducts = products.filter((p) => p.id !== product.id);
+                      setProducts(updatedProducts);
+                      localStorage.setItem("purchasedProducts", JSON.stringify(updatedProducts)); // Update localStorage
                     }}
                     className="absolute text-2xl top-0 right-2 text-gray-400 hover:text-red-500"
                   >
                     &times;
                   </button>
+
 
                   <div className="flex items-center space-x-10">
                     <img
@@ -114,7 +128,25 @@ export default function Cart() {
                     <div>
                       <h3 className="font-medium text-lg">{product.name}</h3>
                       <p className="text-sm text-gray-500">Price: ${product.price}</p>
-                      <p className="text-sm text-gray-500">Quantity: {product.quantity}</p>
+                      <div className="flex items-center space-x-2 mt-2">
+                        <button
+                          className="w-8 h-8 bg-gray-200 rounded text-lg font-bold"
+                          onClick={() =>
+                            updateQuantity(product.id, Math.max(1, product.quantity - 1))
+                          }
+                        >
+                          -
+                        </button>
+                        <span className="text-lg font-semibold">{product.quantity}</span>
+                        <button
+                          className="w-8 h-8 bg-gray-200 rounded text-lg font-bold"
+                          onClick={() =>
+                            updateQuantity(product.id, product.quantity + 1)
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -201,19 +233,19 @@ export default function Cart() {
               className="w-full p-2 border rounded"
             />
           </div>
-
-          <div className="w-full flex justify-between font-semibold sm:mt-10 mt-5">
-            <span>Total</span>
-            <span className="ms-2">QAR {getTotalPrice().toFixed(2)}</span>
-          </div>
-
-          <button
-            onClick={handleOrderNow}
-            className="w-full bg-[#004F44] text-white p-3 rounded-lg mt-6"
-          >
-            Order Now
-          </button>
         </div>
+
+        <div className="w-full flex justify-between font-semibold sm:mt-10 mt-5">
+          <span>Total</span>
+          <span className="ms-2">QAR {getTotalPrice().toFixed(2)}</span>
+        </div>
+
+        <button
+          onClick={handleOrderNow}
+          className="w-full bg-[#004F44] text-white p-3 rounded-lg mt-6"
+        >
+          Order Now
+        </button>
       </div>
     </div>
   );

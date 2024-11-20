@@ -168,7 +168,7 @@ export function Featured() {
                           </div>
 
                           {/* Colors */}
-                          <div className="color flex space-x-2 items-center">
+                          {/*<div className="color flex space-x-2 items-center">
                             <p className="sm:text-sm text-xs">Colors:</p>
                             <div className="flex space-x-2">
                               {colors.length > 0 ? (
@@ -185,7 +185,7 @@ export function Featured() {
                                 <span className="text-xs">N/A</span>
                               )}
                             </div>
-                          </div>
+                          </div>*/}
                         </div>
 
                         <button

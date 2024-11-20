@@ -8,6 +8,7 @@ export function SingleProduct() {
   const [productData, setProductData] = useState(null);
   const [mainImage, setMainImage] = useState("");
   const [inCart, setInCart] = useState(false);
+  const [quantity, setQuantity] = useState(1); // Track the quantity of the product
 
   useEffect(() => {
     // Fetch product data from the API
@@ -25,7 +26,13 @@ export function SingleProduct() {
         // Check if the product is already in local storage
         const storedProducts =
           JSON.parse(localStorage.getItem("purchasedProducts")) || [];
-        setInCart(storedProducts.some((product) => product.id === data._id));
+        const existingProduct = storedProducts.find(
+          (product) => product.id === data._id
+        );
+        if (existingProduct) {
+          setInCart(true);
+          setQuantity(existingProduct.quantity); // If product is in cart, set the stored quantity
+        }
       })
       .catch((error) => console.error("Error fetching product data:", error));
   }, [id]);
@@ -39,7 +46,7 @@ export function SingleProduct() {
       name: productData.M06_product_sku_name,
       price: productData.M06_price,
       src: productData.M06_thumbnail_image,
-      quantity: 1,
+      quantity: quantity, // Store the current quantity
       variations: productData.Variations || [], // Add variations here
     };
 
@@ -61,6 +68,14 @@ export function SingleProduct() {
     localStorage.setItem("purchasedProducts", JSON.stringify(storedProducts));
     setInCart(false);
     toast.success(`${productData.M06_product_sku_name} removed from cart.`);
+  };
+
+  const incrementQuantity = () => {
+    setQuantity((prevQuantity) => prevQuantity + 1);
+  };
+
+  const decrementQuantity = () => {
+    setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
   };
 
   if (!productData) {
@@ -113,13 +128,14 @@ export function SingleProduct() {
             <div className="text-xl font-bold text-red-500">
               QAR {productData.M06_price}
             </div>
-            <div className="text-sm text-gray-600">
+            {/* Uncomment if you want to show the sold count */}
+            {/* <div className="text-sm text-gray-600">
               {productData.M06_quantity} Sold
-            </div>
-            <div className="flex items-center space-x-1 text-yellow-500">
+            </div> */}
+            {/* <div className="flex items-center space-x-1 text-yellow-500">
               <span>★</span>
               <span className="text-lg font-semibold">4.5</span>
-            </div>
+            </div> */}
           </div>
 
           <div>
@@ -130,22 +146,7 @@ export function SingleProduct() {
             </p>
           </div>
 
-          {/* Variations */}
-          <div className="space-y-2">
-            <h4 className="text-lg font-semibold">Color:</h4>
-            <div className="flex space-x-2">
-              {productData.Variations.filter(
-                (variation) => variation.M08_name === "Color"
-              ).map((variation) => (
-                <span
-                  key={variation._id}
-                  className="w-8 h-8 rounded-full border border-gray-300"
-                  style={{ backgroundColor: variation.M09_name.toLowerCase() }}
-                />
-              ))}
-            </div>
-          </div>
-
+          {/* Size Variations */}
           <div className="space-y-2">
             <h4 className="text-lg font-semibold">Size:</h4>
             <div className="flex space-x-2">
@@ -159,6 +160,26 @@ export function SingleProduct() {
                   {variation.M09_name}
                 </button>
               ))}
+            </div>
+          </div>
+
+          {/* Quantity Control */}
+          <div className="space-y-2">
+            <h4 className="text-lg font-semibold">Quantity:</h4>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={decrementQuantity}
+                className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center"
+              >
+                -
+              </button>
+              <span>{quantity}</span>
+              <button
+                onClick={incrementQuantity}
+                className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center"
+              >
+                +
+              </button>
             </div>
           </div>
 
