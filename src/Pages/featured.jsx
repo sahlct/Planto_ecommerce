@@ -20,7 +20,7 @@ export function Featured() {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_API}/api/v1/customer/product-sku-single-by-product?page=1&limit=6&sortField=createdAt&sortOrder=asc&search`
+          `${process.env.REACT_APP_API}/api/v1/customer/product-sku-single-by-product?page=1&limit=4&sortField=createdAt&sortOrder=asc&search`
         );
         const data = await response.json();
 
