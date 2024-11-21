@@ -57,7 +57,7 @@ export function SingleProduct() {
     };
     setSelectedVariations(selectedVariationsI);
     const skuId = findSkuId(skusWithVariations, selectedVariationsI);
-    navigate(`/products/${skuId}`,{replace:true})
+    navigate(`/products/${skuId}`, { replace: true })
     setSelectedSkuId(skuId);
   };
 
@@ -112,6 +112,17 @@ export function SingleProduct() {
       // Check if the product is already in local storage
       const storedProducts = JSON.parse(localStorage.getItem("purchasedProducts")) || [];
       setInCart(storedProducts.some((product) => product.id === data._id));
+      const existingProduct = storedProducts.find(
+        (product) => product.id === data._id
+      );
+
+      if (existingProduct) {
+        setInCart(true);
+        setQuantity(existingProduct.quantity || 1);
+      } else {
+        setQuantity(1);
+      }
+
 
       // Fetch product data from the API
       const [variations, skusWithVariations] = await Promise.all([loadVariations(response.data.data.M06_M05_product_id), loadSkusWithVariations(response.data.data.M06_M05_product_id)]);
@@ -174,6 +185,14 @@ export function SingleProduct() {
     setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
   };
 
+  const goToOrders = () => {
+    navigate('/products')
+  }
+
+  const goToOrder = () => {
+    navigate('/order')
+  }
+
   if (!productData) {
     return <div>Loading...</div>;
   }
@@ -202,8 +221,8 @@ export function SingleProduct() {
                 src={image.M07_image_path}
                 alt={`Thumbnail ${index + 1}`}
                 className={`w-16 h-16 object-cover cursor-pointer ${mainImage === image.M07_image_path
-                    ? "ring-1 ring-[#004F44]"
-                    : ""
+                  ? "ring-1 ring-[#004F44]"
+                  : ""
                   }`}
                 onClick={() => setMainImage(image.M07_image_path)}
               />
@@ -244,21 +263,18 @@ export function SingleProduct() {
           {/* Size Variations */}
           <div className="space-y-2">
             {/* <h4 className="text-lg font-semibold">Size:</h4> */}
-            <div className="flex space-x-2">
+            <div className="flex space-y-2 flex-col">
 
 
               {variations.map((variation) => (
                 <div key={variation._id}>
-                  <h3>{variation.M08_name}</h3>
+                  <h4 className="text-lg font-semibold">{variation.M08_name}:</h4>
                   <div className="flex space-x-2">
                     {variation.options.map((option) => (
                       <button
                         key={option._id}
-                        className={`
-                          w-10 h-10 border border-gray-300 rounded
-                          ${selectedVariations[variation._id] === option._id ? "bg-[#004F44] text-white" : ""}
-                          `}
-
+                        className={`w-10 h-10 border border-gray-300 rounded ${selectedVariations[variation._id] === option._id ? "bg-[#004F44] text-white" : ""
+                          }`}
                         onClick={() => handleVariationChange(variation._id, option._id)}
                       >
                         {option.M09_name}
@@ -267,6 +283,7 @@ export function SingleProduct() {
                   </div>
                 </div>
               ))}
+
             </div>
           </div>
           {/* Quantity Control */}
@@ -279,7 +296,7 @@ export function SingleProduct() {
               >
                 -
               </button>
-              <span>{quantity}</span>
+              <span className="w-4">{quantity}</span>
               <button
                 onClick={incrementQuantity}
                 className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center"
@@ -296,19 +313,24 @@ export function SingleProduct() {
                 onClick={handleRemoveFromCart}
                 className="w-full bg-red-500 text-white py-2 rounded"
               >
-                Remove from Cart
+                Cancel
               </button>
             ) : (
               <button
                 onClick={handleAddToCart}
-                className="w-full bg-[#004F44] text-white py-2 rounded"
+                className="w-full bg-[#004F44] hover:bg-[#004f2af1] text-white py-2 rounded"
               >
                 Add to Cart
               </button>
             )}
-            <button className="w-full border border-[#004F44] text-[#004F44] py-2 rounded">
-              Checkout Now
-            </button>
+            <div className="d-flex sm:space-x-3 space-y-2 sm:space-y-0">
+              <button className="sm:w-[49%] w-full border border-[#004F44] text-[#004F44] py-2 rounded hover:bg-[#004F44] hover:text-white" onClick={goToOrders}>
+                Next product
+              </button>
+              <button className="sm:w-[49%] w-full border border-[#004F44] text-[#004F44] py-2 rounded hover:bg-[#004F44] hover:text-white" onClick={goToOrder}>
+                Orders
+              </button>
+            </div>
           </div>
         </div>
       </div>

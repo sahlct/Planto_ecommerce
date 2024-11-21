@@ -188,7 +188,7 @@ export function Featured() {
                           </div>*/}
                         </div>
 
-                        <button
+                        {/* <button
                           onClick={(e) => {
                             e.stopPropagation();
                             inCart
@@ -201,7 +201,7 @@ export function Featured() {
                           }`}
                         >
                           {inCart ? "Remove" : "Buy"}
-                        </button>
+                        </button> */}
                       </div>
                     </div>
                   );

@@ -181,7 +181,7 @@ export function Product() {
                         </div>*/}
                       </div>
 
-                      <button
+                      {/* <button
                         onClick={(e) => {
                           e.stopPropagation();
                           inCart ? handleRemoveProduct(product.id) : handleBuyProduct(product);
@@ -190,7 +190,7 @@ export function Product() {
                         className={`w-full sm:w-auto text-white text-base sm:text-lg px-4 sm:py-2 py-1 mt-4 rounded ${inCart ? "bg-red-500" : "bg-[#004F44]"}`}
                       >
                         {inCart ? "Remove" : "Buy"}
-                      </button>
+                      </button> */}
                     </div>
                   </div>
                   );
