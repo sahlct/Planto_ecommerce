@@ -144,7 +144,7 @@ export function Featured() {
                       </div>
                       <div className="data mt-4 font-dm flex justify-between text-[#004F44]">
                         <h1 className="sm:text-xl text-sm">{product.name}</h1>
-                        <h4 className="sm:text-lg text-sm">QAR {product.price}</h4>
+                        <h4 className="sm:text-lg text-sm font-semibold text-right">QAR {product.price}</h4>
                       </div>
                       <div className="flex justify-between flex-col sm:flex-row">
                         <div className="variations flex flex-col space-y-1 sm:mt-4 mt-2 items-start">
@@ -152,18 +152,30 @@ export function Featured() {
                           <div className="size flex space-x-2 items-center">
                             <p className="sm:text-sm text-xs">Sizes:</p>
                             <div className="flex space-x-2">
-                              {sizes.length > 0 ? (
-                                sizes.map((size, index) => (
+                              {/* {sizes.length > 0 ? (
+                                sizes.map((size, index) => ( */}
                                   <div
-                                    key={index}
+                                    // key={index}
                                     className="border border-black h-[15px] w-[15px] rounded-full flex items-center justify-center text-[10px]"
                                   >
-                                    {size}
+                                    S
                                   </div>
-                                ))
-                              ) : (
+                                  <div
+                                    // key={index}
+                                    className="border border-black h-[15px] w-[15px] rounded-full flex items-center justify-center text-[10px]"
+                                  >
+                                    M
+                                  </div>
+                                  <div
+                                    // key={index}
+                                    className="border border-black h-[15px] w-[15px] rounded-full flex items-center justify-center text-[10px]"
+                                  >
+                                    L
+                                  </div>
+                                {/* )))
+                               : (
                                 <span className="text-xs">N/A</span>
-                              )}
+                              )} */}
                             </div>
                           </div>
 

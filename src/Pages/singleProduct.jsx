@@ -10,10 +10,10 @@ export function SingleProduct() {
   const [inCart, setInCart] = useState(false);
   const [quantity, setQuantity] = useState(1); // Track the quantity of the product
   const [variations, setVariations] = useState([]);
-  const [skusWithVariations, setskusWithVariations] = useState([])
+  const [skusWithVariations, setskusWithVariations] = useState([]);
   const [selectedVariations, setSelectedVariations] = useState({});
   const [selectedSkuId, setSelectedSkuId] = useState(id);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const loadVariations = async (id) => {
     try {
@@ -23,13 +23,12 @@ export function SingleProduct() {
       const { data } = response;
       if (data.success) {
         setVariations(data.data);
-        return data.data
+        return data.data;
       }
     } catch (error) {
       console.error("Error fetching product variations:", error);
     }
   };
-
 
   const loadSkusWithVariations = async (id) => {
     try {
@@ -39,28 +38,23 @@ export function SingleProduct() {
       const { data } = response;
       if (data.success) {
         setskusWithVariations(data.data);
-        return data.data
+        return data.data;
       }
     } catch (error) {
-      console.error(
-        "Error fetching product skus with variations:",
-        error
-      );
+      console.error("Error fetching product skus with variations:", error);
     }
   };
 
   const handleVariationChange = (variationId, optionId) => {
-
     const selectedVariationsI = {
       ...selectedVariations,
       [variationId]: optionId,
     };
     setSelectedVariations(selectedVariationsI);
     const skuId = findSkuId(skusWithVariations, selectedVariationsI);
-    navigate(`/products/${skuId}`, { replace: true })
+    navigate(`/products/${skuId}`, { replace: true });
     setSelectedSkuId(skuId);
   };
-
 
   //find sku id from variations
   const findSkuId = (skusWithVariations, selectedVariations) => {
@@ -96,7 +90,6 @@ export function SingleProduct() {
     return defaultSelections;
   };
 
-
   //fetch all the product details including varition and skusvariations
   const fetchProductData = async (id) => {
     try {
@@ -110,7 +103,8 @@ export function SingleProduct() {
       setMainImage(data.Images[0]?.M07_image_path || data.M06_thumbnail_image);
 
       // Check if the product is already in local storage
-      const storedProducts = JSON.parse(localStorage.getItem("purchasedProducts")) || [];
+      const storedProducts =
+        JSON.parse(localStorage.getItem("purchasedProducts")) || [];
       setInCart(storedProducts.some((product) => product.id === data._id));
       const existingProduct = storedProducts.find(
         (product) => product.id === data._id
@@ -123,45 +117,54 @@ export function SingleProduct() {
         setQuantity(1);
       }
 
-
       // Fetch product data from the API
-      const [variations, skusWithVariations] = await Promise.all([loadVariations(response.data.data.M06_M05_product_id), loadSkusWithVariations(response.data.data.M06_M05_product_id)]);
+      const [variations, skusWithVariations] = await Promise.all([
+        loadVariations(response.data.data.M06_M05_product_id),
+        loadSkusWithVariations(response.data.data.M06_M05_product_id),
+      ]);
 
       if (variations && skusWithVariations) {
-        const selectedVariations = initializeSelectedVariations(data, variations);
-        const selectedSkuId = findSkuId(skusWithVariations, selectedVariations)
-        console.log(selectedSkuId)
+        const selectedVariations = initializeSelectedVariations(
+          data,
+          variations
+        );
+        const selectedSkuId = findSkuId(skusWithVariations, selectedVariations);
+        console.log(selectedSkuId);
         setSelectedSkuId(selectedSkuId);
       }
-
     } catch (error) {
       console.error("Error fetching product data:", error);
     }
   };
 
   useEffect(() => {
-    fetchProductData(selectedSkuId)
-
+    fetchProductData(selectedSkuId);
   }, [selectedSkuId]);
 
   const handleAddToCart = () => {
-    const storedProducts =
+    let storedProducts =
       JSON.parse(localStorage.getItem("purchasedProducts")) || [];
-
-    const newProduct = {
-      id: productData._id,
-      name: productData.M06_product_sku_name,
-      price: productData.M06_price,
-      src: productData.M06_thumbnail_image,
-      quantity: quantity, // Store the current quantity
-      variations: productData.Variations || [], // Add variations here
-    };
-
-    // Add new product to storage
-    localStorage.setItem(
-      "purchasedProducts",
-      JSON.stringify([...storedProducts, newProduct])
+    const productIndex = storedProducts.findIndex(
+      (product) => product.id === productData._id
     );
+
+    if (productIndex !== -1) {
+      // If product already in cart, just update the quantity
+      storedProducts[productIndex].quantity = quantity; // Use current quantity value
+    } else {
+      // Add new product to cart
+      const newProduct = {
+        id: productData._id,
+        name: productData.M06_product_sku_name,
+        price: productData.M06_price,
+        src: productData.M06_thumbnail_image,
+        quantity: quantity, // Use current quantity value
+        variations: productData.Variations || [], // Add variations
+      };
+      storedProducts.push(newProduct);
+    }
+
+    localStorage.setItem("purchasedProducts", JSON.stringify(storedProducts));
     setInCart(true);
     toast.success(`${productData.M06_product_sku_name} added to cart!`);
   };
@@ -177,21 +180,61 @@ export function SingleProduct() {
     toast.success(`${productData.M06_product_sku_name} removed from cart.`);
   };
 
+  // Call this function when the component mounts or the product data changes
+  const syncQuantityWithLocalStorage = () => {
+    const storedProducts =
+      JSON.parse(localStorage.getItem("purchasedProducts")) || [];
+    const existingProduct = storedProducts.find(
+      (product) => product.id === productData._id
+    );
+
+    if (existingProduct) {
+      setQuantity(existingProduct.quantity); // Sync UI with localStorage
+    }
+  };
+
+  useEffect(() => {
+    if (productData) {
+      syncQuantityWithLocalStorage();
+    }
+  }, [productData]);
+
   const incrementQuantity = () => {
-    setQuantity((prevQuantity) => prevQuantity + 1);
+    setQuantity((prevQuantity) => {
+      const newQuantity = prevQuantity + 1;
+      updateLocalStorageQuantity(newQuantity); // Update localStorage
+      return newQuantity;
+    });
   };
 
   const decrementQuantity = () => {
-    setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
+    setQuantity((prevQuantity) => {
+      const newQuantity = prevQuantity > 1 ? prevQuantity - 1 : 1;
+      updateLocalStorageQuantity(newQuantity); // Update localStorage
+      return newQuantity;
+    });
+  };
+
+  const updateLocalStorageQuantity = (newQuantity) => {
+    let storedProducts =
+      JSON.parse(localStorage.getItem("purchasedProducts")) || [];
+    const productIndex = storedProducts.findIndex(
+      (product) => product.id === productData._id
+    );
+
+    if (productIndex !== -1) {
+      storedProducts[productIndex].quantity = newQuantity; // Update quantity
+      localStorage.setItem("purchasedProducts", JSON.stringify(storedProducts));
+    }
   };
 
   const goToOrders = () => {
-    navigate('/products')
-  }
+    navigate("/products");
+  };
 
   const goToOrder = () => {
-    navigate('/order')
-  }
+    navigate("/order");
+  };
 
   if (!productData) {
     return <div>Loading...</div>;
@@ -220,10 +263,11 @@ export function SingleProduct() {
                 key={image._id}
                 src={image.M07_image_path}
                 alt={`Thumbnail ${index + 1}`}
-                className={`w-16 h-16 object-cover cursor-pointer ${mainImage === image.M07_image_path
-                  ? "ring-1 ring-[#004F44]"
-                  : ""
-                  }`}
+                className={`w-16 h-16 object-cover cursor-pointer ${
+                  mainImage === image.M07_image_path
+                    ? "ring-1 ring-[#004F44]"
+                    : ""
+                }`}
                 onClick={() => setMainImage(image.M07_image_path)}
               />
             ))}
@@ -264,18 +308,23 @@ export function SingleProduct() {
           <div className="space-y-2">
             {/* <h4 className="text-lg font-semibold">Size:</h4> */}
             <div className="flex space-y-2 flex-col">
-
-
               {variations.map((variation) => (
                 <div key={variation._id}>
-                  <h4 className="text-lg font-semibold">{variation.M08_name}:</h4>
+                  <h4 className="text-lg font-semibold">
+                    {variation.M08_name}:
+                  </h4>
                   <div className="flex space-x-2">
                     {variation.options.map((option) => (
                       <button
                         key={option._id}
-                        className={`w-10 h-10 border border-gray-300 rounded ${selectedVariations[variation._id] === option._id ? "bg-[#004F44] text-white" : ""
-                          }`}
-                        onClick={() => handleVariationChange(variation._id, option._id)}
+                        className={`w-10 h-10 border border-gray-300 rounded ${
+                          selectedVariations[variation._id] === option._id
+                            ? "bg-[#004F44] text-white"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          handleVariationChange(variation._id, option._id)
+                        }
                       >
                         {option.M09_name}
                       </button>
@@ -283,7 +332,6 @@ export function SingleProduct() {
                   </div>
                 </div>
               ))}
-
             </div>
           </div>
           {/* Quantity Control */}
@@ -324,10 +372,16 @@ export function SingleProduct() {
               </button>
             )}
             <div className="d-flex sm:space-x-3 space-y-2 sm:space-y-0">
-              <button className="sm:w-[49%] w-full border border-[#004F44] text-[#004F44] py-2 rounded hover:bg-[#004F44] hover:text-white" onClick={goToOrders}>
+              <button
+                className="sm:w-[49%] w-full border border-[#004F44] text-[#004F44] py-2 rounded hover:bg-[#004F44] hover:text-white"
+                onClick={goToOrders}
+              >
                 Next product
               </button>
-              <button className="sm:w-[49%] w-full border border-[#004F44] text-[#004F44] py-2 rounded hover:bg-[#004F44] hover:text-white" onClick={goToOrder}>
+              <button
+                className="sm:w-[49%] w-full border border-[#004F44] text-[#004F44] py-2 rounded hover:bg-[#004F44] hover:text-white"
+                onClick={goToOrder}
+              >
                 Orders
               </button>
             </div>
