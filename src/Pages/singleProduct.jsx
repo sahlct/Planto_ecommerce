@@ -8,7 +8,7 @@ export function SingleProduct() {
   const [productData, setProductData] = useState(null);
   const [mainImage, setMainImage] = useState("");
   const [inCart, setInCart] = useState(false);
-  const [quantity, setQuantity] = useState(1); // Track the quantity of the product
+  const [quantity, setQuantity] = useState(1);
   const [variations, setVariations] = useState([]);
   const [skusWithVariations, setskusWithVariations] = useState([]);
   const [selectedVariations, setSelectedVariations] = useState({});
@@ -56,7 +56,6 @@ export function SingleProduct() {
     setSelectedSkuId(skuId);
   };
 
-  //find sku id from variations
   const findSkuId = (skusWithVariations, selectedVariations) => {
     const matchingSku = skusWithVariations.find((sku) =>
       sku.variations.every(
@@ -71,18 +70,16 @@ export function SingleProduct() {
   const initializeSelectedVariations = (productData, variations) => {
     const defaultSelections = {};
 
-    // Use variations from the productData first
     if (productData?.Variations?.length > 0) {
       productData.Variations.forEach((productVariation) => {
         defaultSelections[productVariation.M10_M08_product_variation_id] =
-          productVariation.M10_M09_variation_option_id; // Set the selected option for each variation
+          productVariation.M10_M09_variation_option_id;
       });
     }
 
-    // Fill in any missing variations with the first available option from the variations array
     variations.forEach((variation) => {
       if (!defaultSelections[variation._id] && variation.options?.length > 0) {
-        defaultSelections[variation._id] = variation.options[0]._id; // Select the first option by default
+        defaultSelections[variation._id] = variation.options[0]._id;
       }
     });
 
@@ -90,7 +87,6 @@ export function SingleProduct() {
     return defaultSelections;
   };
 
-  //fetch all the product details including varition and skusvariations
   const fetchProductData = async (id) => {
     try {
       const response = await axios.get(
@@ -99,10 +95,8 @@ export function SingleProduct() {
       const data = response.data.data;
       setProductData(data);
 
-      // Set main image to the first image in the Images array
       setMainImage(data.Images[0]?.M07_image_path || data.M06_thumbnail_image);
 
-      // Check if the product is already in local storage
       const storedProducts =
         JSON.parse(localStorage.getItem("purchasedProducts")) || [];
       setInCart(storedProducts.some((product) => product.id === data._id));
@@ -117,7 +111,6 @@ export function SingleProduct() {
         setQuantity(1);
       }
 
-      // Fetch product data from the API
       const [variations, skusWithVariations] = await Promise.all([
         loadVariations(response.data.data.M06_M05_product_id),
         loadSkusWithVariations(response.data.data.M06_M05_product_id),
@@ -149,17 +142,15 @@ export function SingleProduct() {
     );
 
     if (productIndex !== -1) {
-      // If product already in cart, just update the quantity
-      storedProducts[productIndex].quantity = quantity; // Use current quantity value
+      storedProducts[productIndex].quantity = quantity;
     } else {
-      // Add new product to cart
       const newProduct = {
         id: productData._id,
         name: productData.M06_product_sku_name,
         price: productData.M06_price,
         src: productData.M06_thumbnail_image,
-        quantity: quantity, // Use current quantity value
-        variations: productData.Variations || [], // Add variations
+        quantity: quantity,
+        variations: productData.Variations || [],
       };
       storedProducts.push(newProduct);
     }
@@ -180,7 +171,6 @@ export function SingleProduct() {
     toast.success(`${productData.M06_product_sku_name} removed from cart.`);
   };
 
-  // Call this function when the component mounts or the product data changes
   const syncQuantityWithLocalStorage = () => {
     const storedProducts =
       JSON.parse(localStorage.getItem("purchasedProducts")) || [];
@@ -189,7 +179,7 @@ export function SingleProduct() {
     );
 
     if (existingProduct) {
-      setQuantity(existingProduct.quantity); // Sync UI with localStorage
+      setQuantity(existingProduct.quantity);
     }
   };
 
@@ -202,7 +192,7 @@ export function SingleProduct() {
   const incrementQuantity = () => {
     setQuantity((prevQuantity) => {
       const newQuantity = prevQuantity + 1;
-      updateLocalStorageQuantity(newQuantity); // Update localStorage
+      updateLocalStorageQuantity(newQuantity);
       return newQuantity;
     });
   };
@@ -210,7 +200,7 @@ export function SingleProduct() {
   const decrementQuantity = () => {
     setQuantity((prevQuantity) => {
       const newQuantity = prevQuantity > 1 ? prevQuantity - 1 : 1;
-      updateLocalStorageQuantity(newQuantity); // Update localStorage
+      updateLocalStorageQuantity(newQuantity);
       return newQuantity;
     });
   };
@@ -223,7 +213,7 @@ export function SingleProduct() {
     );
 
     if (productIndex !== -1) {
-      storedProducts[productIndex].quantity = newQuantity; // Update quantity
+      storedProducts[productIndex].quantity = newQuantity;
       localStorage.setItem("purchasedProducts", JSON.stringify(storedProducts));
     }
   };
@@ -243,17 +233,22 @@ export function SingleProduct() {
   return (
     <div className="container mx-auto px-5 pt-24 font-dm">
       <Toaster position="top-center" reverseOrder={false} />
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-4 md:h-[calc(100vh-6rem)]">
         {/* Image and Thumbnails Section */}
-        <div className="space-y-4">
-          {/* Main Image with Fixed Sizing */}
-          <div className="max-w-[400px] max-h-[400px] h-[300px]">
-            <img
-              src={mainImage}
-              alt="Main product"
-              className="object-cover w-full h-full transition-all duration-500 ease-in-out transform hover:scale-105"
-              key={mainImage}
-            />
+        <div className="flex flex-col gap-5 justify-center items-center">
+          <div className="flex flex-col space-y-4 md:max-h-full">
+            {/* Main Image with Fixed Sizing and Centered */}
+
+            <div className="md:flex-grow md:flex md:items-center md:justify-center">
+              <div className="max-w-[400px] max-h-[400px] h-[300px] md:flex md:items-center md:justify-center">
+                <img
+                  src={mainImage}
+                  alt="Main product"
+                  className="max-w-full max-h-full object-contain transition-all duration-500 ease-in-out transform hover:scale-105"
+                  key={mainImage}
+                />
+              </div>
+            </div>
           </div>
 
           {/* Thumbnails */}
@@ -275,115 +270,108 @@ export function SingleProduct() {
         </div>
 
         {/* Product Details Section */}
-        <div className="space-y-4 py-4">
-          <div>
-            <h2 className="text-xl font-bold text-[#004F44]">
-              {productData.M06_product_sku_name}
-            </h2>
-            <div className="text-lg text-gray-500 line-through">
-              QAR {productData.M06_MRP}
+        <div className="md:overflow-y-auto md:pr-4 md:h-full">
+          <div className="space-y-4 py-4">
+            <div>
+              <h2 className="text-xl font-bold text-[#004F44]">
+                {productData.M06_product_sku_name}
+              </h2>
+              <div className="text-lg text-gray-500 line-through">
+                QAR {productData.M06_MRP}
+              </div>
+              <div className="text-xl font-bold text-red-500">
+                QAR {productData.M06_price}
+              </div>
             </div>
-            <div className="text-xl font-bold text-red-500">
-              QAR {productData.M06_price}
+
+            <div>
+              <h3 className="text-lg font-semibold">Description:</h3>
+              <p className="text-gray-600">
+                {productData.M06_description}
+                <span className="text-blue-600 cursor-pointer"> See More</span>
+              </p>
             </div>
-            {/* Uncomment if you want to show the sold count */}
-            {/* <div className="text-sm text-gray-600">
-              {productData.M06_quantity} Sold
-            </div> */}
-            {/* <div className="flex items-center space-x-1 text-yellow-500">
-              <span>★</span>
-              <span className="text-lg font-semibold">4.5</span>
-            </div> */}
-          </div>
 
-          <div>
-            <h3 className="text-lg font-semibold">Description:</h3>
-            <p className="text-gray-600">
-              {productData.M06_description}
-              <span className="text-blue-600 cursor-pointer"> See More</span>
-            </p>
-          </div>
-
-          {/* Size Variations */}
-          <div className="space-y-2">
-            {/* <h4 className="text-lg font-semibold">Size:</h4> */}
-            <div className="flex space-y-2 flex-col">
-              {variations.map((variation) => (
-                <div key={variation._id}>
-                  <h4 className="text-lg font-semibold">
-                    {variation.M08_name}:
-                  </h4>
-                  <div className="flex space-x-2">
-                    {variation.options.map((option) => (
-                      <button
-                        key={option._id}
-                        className={`w-10 h-10 border border-gray-300 rounded ${
-                          selectedVariations[variation._id] === option._id
-                            ? "bg-[#004F44] text-white"
-                            : ""
-                        }`}
-                        onClick={() =>
-                          handleVariationChange(variation._id, option._id)
-                        }
-                      >
-                        {option.M09_name}
-                      </button>
-                    ))}
+            {/* Size Variations */}
+            <div className="space-y-2">
+              <div className="flex space-y-2 flex-col">
+                {variations.map((variation) => (
+                  <div key={variation._id}>
+                    <h4 className="text-lg font-semibold">
+                      {variation.M08_name}:
+                    </h4>
+                    <div className="flex space-x-2">
+                      {variation.options.map((option) => (
+                        <button
+                          key={option._id}
+                          className={`w-10 h-10 border border-gray-300 rounded ${
+                            selectedVariations[variation._id] === option._id
+                              ? "bg-[#004F44] text-white"
+                              : ""
+                          }`}
+                          onClick={() =>
+                            handleVariationChange(variation._id, option._id)
+                          }
+                        >
+                          {option.M09_name}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-          {/* Quantity Control */}
-          <div className="space-y-2">
-            <h4 className="text-lg font-semibold">Quantity:</h4>
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={decrementQuantity}
-                className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center"
-              >
-                -
-              </button>
-              <span className="w-4">{quantity}</span>
-              <button
-                onClick={incrementQuantity}
-                className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center"
-              >
-                +
-              </button>
-            </div>
-          </div>
 
-          <div className="flex flex-col space-y-2">
-            {/* Conditionally Render Button Based on Cart Status */}
-            {inCart ? (
-              <button
-                onClick={handleRemoveFromCart}
-                className="w-full bg-red-500 text-white py-2 rounded"
-              >
-                Cancel
-              </button>
-            ) : (
-              <button
-                onClick={handleAddToCart}
-                className="w-full bg-[#004F44] hover:bg-[#004f2af1] text-white py-2 rounded"
-              >
-                Add to Cart
-              </button>
-            )}
-            <div className="d-flex sm:space-x-3 space-y-2 sm:space-y-0">
-              <button
-                className="sm:w-[49%] w-full border border-[#004F44] text-[#004F44] py-2 rounded hover:bg-[#004F44] hover:text-white"
-                onClick={goToOrders}
-              >
-                Next product
-              </button>
-              <button
-                className="sm:w-[49%] w-full border border-[#004F44] text-[#004F44] py-2 rounded hover:bg-[#004F44] hover:text-white"
-                onClick={goToOrder}
-              >
-                Orders
-              </button>
+            {/* Quantity Control */}
+            <div className="space-y-2">
+              <h4 className="text-lg font-semibold">Quantity:</h4>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={decrementQuantity}
+                  className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center"
+                >
+                  -
+                </button>
+                <span className="w-4">{quantity}</span>
+                <button
+                  onClick={incrementQuantity}
+                  className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            <div className="flex flex-col space-y-2">
+              {inCart ? (
+                <button
+                  onClick={handleRemoveFromCart}
+                  className="w-full bg-red-500 text-white py-2 rounded"
+                >
+                  Cancel
+                </button>
+              ) : (
+                <button
+                  onClick={handleAddToCart}
+                  className="w-full bg-[#004F44] hover:bg-[#004f2af1] text-white py-2 rounded"
+                >
+                  Add to Cart
+                </button>
+              )}
+              <div className="d-flex sm:space-x-2 space-y-2 sm:space-y-0">
+                <button
+                  className="sm:w-[49%] w-full border border-[#004F44] text-[#004F44] py-2 rounded hover:bg-[#004F44] hover:text-white"
+                  onClick={goToOrders}
+                >
+                  Next product
+                </button>
+                <button
+                  className="sm:w-[49%] w-full border border-[#004F44] text-[#004F44] py-2 rounded hover:bg-[#004F44] hover:text-white"
+                  onClick={goToOrder}
+                >
+                  Orders
+                </button>
+              </div>
             </div>
           </div>
         </div>
