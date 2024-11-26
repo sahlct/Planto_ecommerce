@@ -54,19 +54,31 @@ export default function Cart() {
       toast.error("Please fill in all required fields!");
       return;
     }
-
-    let message = `CADRE Flower Shoppee\nName: ${name}\nContact: ${contactNumber}\nZone: ${zone}\nStreet: ${street || "N/A"}\nBuilding: ${building || "N/A"}\nDoor Number: ${doorNumber || "N/A"}\n\n---------------------------------\nOrdered Item's\n---------------------------------\n`;
-
+  
+    let message = `🌻 CADRE Flower Shoppee 🌻\n\n`;
+    message += `---------------------------------\n 🛒 Ordered Item's\n---------------------------------\n`;
+  
     products.forEach((product, index) => {
       message += `${index + 1}. Name: ${product.name}\n    Price: $${product.price}\n    Quantity: ${product.quantity}\n\n`;
     });
-
+  
     const subtotal = getTotalPrice().toFixed(2);
-    message += `--------------------------------\nTotal : $${subtotal}/-\n\nHappy Purchasing!\n--------------------------------`;
-
+    message += `--------------------------------\nTotal : $${subtotal}/-\n--------------------------------\n\n`;
+  
+    message += `👤 Customer Details\n`;
+    message += `Name: ${name}\n`;
+    message += `Contact: ${contactNumber}\n`;
+    message += `Zone: ${zone}\n`;
+    message += `Street: ${street || "N/A"}\n`;
+    message += `Building: ${building || "N/A"}\n`;
+    message += `Door Number: ${doorNumber || "N/A"}\n\n`;
+  
+    message += `🎉Happy Purchasing!🎉\n--------------------------------`;
+  
     const whatsappUrl = `https://wa.me/918111866093?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
   };
+  
 
   return (
     <div className="flex flex-col lg:flex-row h-screen pt-20">
